@@ -284,6 +284,11 @@ class DatabaseQueryBuilderTest extends TestCase
         $builder->select('*')->from('users')->where('id', '=', 1);
         $this->assertEquals('select * from "users" where "id" = ?', $builder->toSql());
         $this->assertEquals([0 => 1], $builder->getBindings());
+
+        $builder = $this->getBuilder();
+        $builder->select('*')->from('users')->where('id', '=', [12, 30]);
+        $this->assertEquals('select * from "users" where "id" = ?', $builder->toSql());
+        $this->assertEquals([0 => 12], $builder->getBindings());
     }
 
     public function testMySqlWrappingProtectsQuotationMarks()
