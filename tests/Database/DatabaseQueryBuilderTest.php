@@ -296,6 +296,16 @@ class DatabaseQueryBuilderTest extends TestCase
         $builder->select('*')->from('users')->where('id', '=', 1);
         $this->assertSame('select * from "users" where "id" = ?', $builder->toSql());
         $this->assertEquals([0 => 1], $builder->getBindings());
+
+        $builder = $this->getBuilder();
+        $builder->select('*')->from('users')->where('id', '=', [1, 2]);
+        $this->assertSame('select * from "users" where "id" = ?', $builder->toSql());
+        $this->assertEquals([0 => 1], $builder->getBindings());
+
+        $builder = $this->getBuilder();
+        $builder->select('*')->from('users')->where('id', '=', [[1], [2]]);
+        $this->assertSame('select * from "users" where "id" = ?', $builder->toSql());
+        $this->assertEquals([0 => 1], $builder->getBindings());
     }
 
     public function testWheresWithArrayValue()
